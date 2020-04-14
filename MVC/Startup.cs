@@ -33,18 +33,18 @@ namespace MVC
                 options.DefaultScheme = "Cookies"; // We are using a cookie to locally sign-in the user and 
                 options.DefaultChallengeScheme = "oidc"; // when we need the user to login, we will be using the OpenID Connect protocol.
             })
-                .AddCookie("Cookies")
-                .AddOpenIdConnect("oidc", options =>
-                {
-                    options.Authority = "http://localhost:5000"; // IdentityServer
-                    options.RequireHttpsMetadata = false;
+            .AddCookie("Cookies")
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.Authority = "http://localhost:5000"; // IdentityServer
+                options.RequireHttpsMetadata = false;
 
-                    options.ClientId = "mvc";
-                    options.ClientSecret = "secret";
-                    options.ResponseType = "code";
+                options.ClientId = "mvc";
+                options.ClientSecret = "secret";
+                options.ResponseType = "code";
 
-                    options.SaveTokens = true; // persist the tokens from IdentityServer in the cookie
-                });
+                options.SaveTokens = true; // persist the tokens from IdentityServer in the cookie
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
