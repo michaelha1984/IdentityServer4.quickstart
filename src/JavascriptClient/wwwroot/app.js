@@ -11,6 +11,15 @@ var config = {
 
 var mgr = new Oidc.UserManager(config);
 
+mgr.getUser().then(function (user) {
+    if (user) {
+        log("User logged in", user.profile);
+    }
+    else {
+        log("User not logged in");
+    }
+});
+
 // Click events
 document.getElementById("login").addEventListener("click", login, false);
 document.getElementById("api").addEventListener("click", api, false);
