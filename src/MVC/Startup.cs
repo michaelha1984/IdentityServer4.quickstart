@@ -44,6 +44,9 @@ namespace MVC
                 options.ResponseType = "code";
 
                 options.SaveTokens = true; // persist the tokens from IdentityServer in the cookie
+
+                options.Scope.Add("api1");
+                options.Scope.Add("offline_access");
             });
         }
 
