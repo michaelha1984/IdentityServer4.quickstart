@@ -1,4 +1,9 @@
 ﻿
+// Click events
+document.getElementById("login").addEventListener("click", login, false);
+document.getElementById("api").addEventListener("click", api, false);
+document.getElementById("logout").addEventListener("click", logout, false);
+
 // Functions
 function log() {
     document.getElementById('results').innerText = '';
