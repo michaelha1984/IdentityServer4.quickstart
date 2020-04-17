@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -27,60 +28,128 @@ namespace IdentityServerAspNetIdentity
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // client credentials flow client
                 new Client
                 {
                     ClientId = "client",
-                    ClientName = "Client Credentials Client",
 
+                    // no interactive user, use the clientid/secret for authentication
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
 
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    // scopes that client has access to
                     AllowedScopes = { "api1" }
                 },
-
-                // MVC client using code flow + pkce
                 new Client
                 {
                     ClientId = "mvc",
-                    ClientName = "MVC Client",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequireConsent = false,
                     RequirePkce = true,
-                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
-                    RedirectUris = { "http://localhost:5003/signin-oidc" },
-                    FrontChannelLogoutUri = "http://localhost:5003/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:5003/signout-callback-oidc" },
+                    // where to redirect to after login
+                    RedirectUris = {
+                        "http://localhost:5002/signin-oidc"
+                    },
 
-                    AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "api1" }
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = {
+                        "http://localhost:5002/signout-callback-oidc"
+                    },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "api1"
+                    },
+
+                    AllowOfflineAccess = true
                 },
-
-                // SPA client using code flow + pkce
+                // JavaScript Client
                 new Client
                 {
-                    ClientId = "spa",
-                    ClientName = "SPA Client",
-                    ClientUri = "http://identityserver.io",
-
+                    ClientId = "js",
+                    ClientName = "JavaScript Client",
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,
 
-                    RedirectUris =
+                    RedirectUris =           { "http://localhost:5003/callback.html" },
+                    PostLogoutRedirectUris = { "http://localhost:5003/index.html" },
+                    AllowedCorsOrigins =     { "http://localhost:5003" },
+
+                    AllowedScopes =
                     {
-                        "http://localhost:5002/index.html",
-                        "http://localhost:5002/callback.html",
-                        "http://localhost:5002/silent.html",
-                        "http://localhost:5002/popup.html",
-                    },
-
-                    PostLogoutRedirectUris = { "http://localhost:5002/index.html" },
-                    AllowedCorsOrigins = { "http://localhost:5002" },
-
-                    AllowedScopes = { "openid", "profile", "api1" }
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "api1"
+                    }
                 }
             };
+
+        //new Client[]
+        //{
+        //    // client credentials flow client
+        //    new Client
+        //    {
+        //        ClientId = "client",
+        //        ClientName = "Client Credentials Client",
+
+        //        AllowedGrantTypes = GrantTypes.ClientCredentials,
+        //        ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
+
+        //        AllowedScopes = { "api1" }
+        //    },
+
+        //    // MVC client using code flow + pkce
+        //    new Client
+        //    {
+        //        ClientId = "mvc",
+        //        ClientName = "MVC Client",
+
+        //        AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+        //        RequirePkce = true,
+        //        ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+
+        //        RedirectUris = { "http://localhost:5003/signin-oidc" },
+        //        FrontChannelLogoutUri = "http://localhost:5003/signout-oidc",
+        //        PostLogoutRedirectUris = { "http://localhost:5003/signout-callback-oidc" },
+
+        //        AllowOfflineAccess = true,
+        //        AllowedScopes = { "openid", "profile", "api1" }
+        //    },
+
+        //    // SPA client using code flow + pkce
+        //    new Client
+        //    {
+        //        ClientId = "spa",
+        //        ClientName = "SPA Client",
+        //        ClientUri = "http://identityserver.io",
+
+        //        AllowedGrantTypes = GrantTypes.Code,
+        //        RequirePkce = true,
+        //        RequireClientSecret = false,
+
+        //        RedirectUris =
+        //        {
+        //            "http://localhost:5002/index.html",
+        //            "http://localhost:5002/callback.html",
+        //            "http://localhost:5002/silent.html",
+        //            "http://localhost:5002/popup.html",
+        //        },
+
+        //        PostLogoutRedirectUris = { "http://localhost:5002/index.html" },
+        //        AllowedCorsOrigins = { "http://localhost:5002" },
+
+        //        AllowedScopes = { "openid", "profile", "api1" }
+        //    }
+        //};
     }
 }
