@@ -21,7 +21,8 @@ namespace IdentityServerAspNetIdentity
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
             {
-                new ApiResource("api1", "My API #1")
+                new ApiResource("api1", "My API #1"),
+                new ApiResource("ocelot", "My API Gateway"),
             };
 
 
@@ -67,7 +68,8 @@ namespace IdentityServerAspNetIdentity
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "api1"
+                        "api1",
+                        "ocelot"
                     },
 
                     AllowOfflineAccess = true
