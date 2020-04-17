@@ -49,5 +49,17 @@ namespace MVC.Controllers
             ViewBag.Json = JArray.Parse(content).ToString();
             return View("json");
         }
+
+        public async Task<IActionResult> CallApiGw()
+        {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var content = await client.GetStringAsync("http://localhost:7000/call-api");
+
+            ViewBag.Json = JArray.Parse(content).ToString();
+            return View("json");
+        }
     }
 }
